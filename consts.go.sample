@@ -1,0 +1,3 @@
+package main
+
+const AOC_SESSION = "fill-me"
