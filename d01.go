@@ -1,29 +1,26 @@
 package main
 
 import (
-	"fmt"
-	"io"
-	"log"
-	"net/http"
+	"strconv"
+	"strings"
 )
 
-func downloadText(url string) string {
-	client := &http.Client{}
-	req, err := http.NewRequest("GET", url, nil)
-	req.Header.Add("Cookie", "session="+AOC_SESSION)
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return string(body)
-}
-
 func main() {
-	text := downloadText("https://adventofcode.com/2021/day/1/input")
-	fmt.Println(">>", text)
+	text := strings.Trim(readFile("d01.input"), "\n")
+	numIncreases := 0
+	lines := strings.Split(text, "\n")
+	previousNum, err := strconv.Atoi(lines[0])
+	check(err)
+	for _, line := range lines[1:] {
+		currentNum, err := strconv.Atoi(line)
+		check(err)
+		if currentNum > previousNum {
+			numIncreases++
+			println("Increased")
+		} else {
+			println("---")
+		}
+		previousNum = currentNum
+	}
+	println("Result:", numIncreases)
 }

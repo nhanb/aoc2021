@@ -1,3 +1,3 @@
 .PHONY: d1
 d01:
-	go run d01.go consts.go
+	go run d01.go misc.go
