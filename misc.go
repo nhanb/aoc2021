@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 func check(e error) {
@@ -29,4 +30,13 @@ func readFile(path string) string {
 	data, err := os.ReadFile(path)
 	check(err)
 	return string(data)
+}
+
+func stringsToInts(strings []string) []int {
+	// Not having a generic map() is pretty goofy ngl
+	ints := make([]int, len(strings))
+	for index, str := range strings {
+		ints[index], _ = strconv.Atoi(str)
+	}
+	return ints
 }

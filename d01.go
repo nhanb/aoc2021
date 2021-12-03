@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	part2()
+	part2Recursive()
 }
 
 func part1() {
@@ -54,4 +54,42 @@ func part2() {
 
 	}
 	println("Result:", numIncreases)
+}
+
+func part2Recursive() {
+	text := strings.Trim(readFile("d01.input"), "\n")
+	lines := strings.Split(text, "\n")
+	numbers := stringsToInts(lines)
+	numIncreases := reduce(
+		numbers[2:],
+		Progress{numbers[0], numbers[1], -1, 0},
+	)
+	println("Result:", numIncreases)
+}
+
+type Progress struct {
+	n1           int
+	n2           int
+	previousSum  int
+	numIncreases int
+}
+
+func reduceFunc(prog Progress, n3 int) Progress {
+	currentSum := prog.n1 + prog.n2 + n3
+	if currentSum > prog.previousSum && prog.previousSum != -1 {
+		prog.numIncreases++
+	}
+	prog.n1 = prog.n2
+	prog.n2 = n3
+	prog.previousSum = currentSum
+	println(prog.n1, prog.n2, prog.previousSum, prog.numIncreases)
+	return prog
+}
+
+func reduce(numbers []int, progress Progress) int {
+	if len(numbers) == 0 {
+		return progress.numIncreases
+	}
+	progress = reduceFunc(progress, numbers[0])
+	return reduce(numbers[1:], progress)
 }
