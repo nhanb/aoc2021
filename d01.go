@@ -5,11 +5,7 @@ import (
 	"strings"
 )
 
-func main() {
-	part2Recursive()
-}
-
-func part1() {
+func day01Part1() {
 	text := strings.Trim(readFile("d01.input"), "\n")
 	lines := strings.Split(text, "\n")
 	numIncreases := 0
@@ -29,7 +25,7 @@ func part1() {
 	println("Result:", numIncreases)
 }
 
-func part2() {
+func day01Part2() {
 	text := strings.Trim(readFile("d01.input"), "\n")
 	lines := strings.Split(text, "\n")
 	numIncreases := 0
@@ -56,7 +52,7 @@ func part2() {
 	println("Result:", numIncreases)
 }
 
-func part2Recursive() {
+func day01Part2Recursive() {
 	text := strings.Trim(readFile("d01.input"), "\n")
 	lines := strings.Split(text, "\n")
 	numbers := stringsToInts(lines)

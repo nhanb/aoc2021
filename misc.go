@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func check(e error) {
@@ -30,6 +31,11 @@ func readFile(path string) string {
 	data, err := os.ReadFile(path)
 	check(err)
 	return string(data)
+}
+
+func readLines(path string) []string {
+	text := strings.Trim(readFile(path), "\n")
+	return strings.Split(text, "\n")
 }
 
 func stringsToInts(strings []string) []int {
