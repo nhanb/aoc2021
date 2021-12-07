@@ -55,26 +55,21 @@ func findMatchingLine(lines []string, currentIndex int, mostCommon bool) string 
 		return lines[0]
 	}
 
-	var linesWith0 []string
-	var linesWith1 []string
+	sortedLines := make(map[rune][]string)
 
 	for _, line := range lines {
-		switch line[currentIndex] {
-		case '0':
-			linesWith0 = append(linesWith0, line)
-		case '1':
-			linesWith1 = append(linesWith1, line)
-		}
+		char := rune(line[currentIndex])
+		sortedLines[char] = append(sortedLines[char], line)
 	}
 
 	var linesMatchingMostCommon []string
 	var linesMatchingLeastCommon []string
-	if len(linesWith0) > len(linesWith1) {
-		linesMatchingMostCommon = linesWith0
-		linesMatchingLeastCommon = linesWith1
+	if len(sortedLines['0']) > len(sortedLines['1']) {
+		linesMatchingMostCommon = sortedLines['0']
+		linesMatchingLeastCommon = sortedLines['1']
 	} else {
-		linesMatchingMostCommon = linesWith1
-		linesMatchingLeastCommon = linesWith0
+		linesMatchingMostCommon = sortedLines['1']
+		linesMatchingLeastCommon = sortedLines['0']
 	}
 
 	if mostCommon {
