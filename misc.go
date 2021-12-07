@@ -46,3 +46,8 @@ func stringsToInts(strings []string) []int {
 	}
 	return ints
 }
+
+func binaryToDecimal(input string) int64 {
+	result, _ := strconv.ParseInt(string(input), 2, 64)
+	return result
+}

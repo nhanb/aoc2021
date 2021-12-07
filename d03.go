@@ -40,3 +40,46 @@ func day03Part1() {
 	println("Epsilon:", epsilon)
 	println("Result:", gamma*epsilon)
 }
+
+func day03Part2() {
+	lines := readLines("d03.input")
+	ogRating := binaryToDecimal(findMatchingLine(lines, 0, true))
+	csRating := binaryToDecimal(findMatchingLine(lines, 0, false))
+	println("Oxygen generator rating:", ogRating)
+	println("CO2 scrubber rating:", csRating)
+	println("Result:", ogRating*csRating)
+}
+
+func findMatchingLine(lines []string, currentIndex int, mostCommon bool) string {
+	if len(lines) == 1 {
+		return lines[0]
+	}
+
+	var linesWith0 []string
+	var linesWith1 []string
+
+	for _, line := range lines {
+		switch line[currentIndex] {
+		case '0':
+			linesWith0 = append(linesWith0, line)
+		case '1':
+			linesWith1 = append(linesWith1, line)
+		}
+	}
+
+	var linesMatchingMostCommon []string
+	var linesMatchingLeastCommon []string
+	if len(linesWith0) > len(linesWith1) {
+		linesMatchingMostCommon = linesWith0
+		linesMatchingLeastCommon = linesWith1
+	} else {
+		linesMatchingMostCommon = linesWith1
+		linesMatchingLeastCommon = linesWith0
+	}
+
+	if mostCommon {
+		return findMatchingLine(linesMatchingMostCommon, currentIndex+1, mostCommon)
+	} else {
+		return findMatchingLine(linesMatchingLeastCommon, currentIndex+1, mostCommon)
+	}
+}
