@@ -1,3 +1,3 @@
 .PHONY: run
 run:
-	go run *.go
+	go run d*.go main.go misc.go
