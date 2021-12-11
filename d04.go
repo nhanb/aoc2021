@@ -13,8 +13,16 @@ func day04Part1() {
 	boards := parseBoards(lines[1:])
 	var drawn []int
 
-	for _, draw := range draws {
+	for turn, draw := range draws {
 		drawn = append(drawn, draw)
+		for boardIndex, board := range boards {
+			if bingo(board, drawn) {
+				println("Turn", turn, "- Bingo on board number", boardIndex+1)
+				fmt.Println(board)
+				fmt.Println(drawn)
+				return
+			}
+		}
 	}
 
 	fmt.Println(draws)
@@ -93,10 +101,25 @@ func bingo(board Board, drawn []int) bool {
 		}
 	}
 
-	//println("isHorizontalBingo:", isHorizontalBingo)
-	//println("isVerticalBingo:", isVerticalBingo)
+	if !isHorizontalBingo && !isVerticalBingo {
+		return false
+	}
 
-	return isHorizontalBingo || isVerticalBingo
+	println("isHorizontalBingo:", isHorizontalBingo)
+	println("isVerticalBingo:", isVerticalBingo)
+	fmt.Println("Position in board:", positionInBoard)
+
+	score := 0
+	for _, row := range board {
+		for _, num := range row {
+			if !intInSlice(num, drawn) {
+				score += num
+			}
+		}
+	}
+	score *= latestDraw
+	println("Score:", score)
+	return true
 }
 
 func intInSlice(needle int, haystack []int) bool {
