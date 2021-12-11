@@ -7,28 +7,29 @@ import (
 	"strings"
 )
 
-func day04Part1() {
+func day04() {
 	lines := readLines("d04.input")
 	draws := stringsToInts(strings.Split(lines[0], ","))
 	boards := parseBoards(lines[1:])
+	wonBoardIndexes := make(map[int]bool)
 	var drawn []int
 
 	for turn, draw := range draws {
 		drawn = append(drawn, draw)
 		for boardIndex, board := range boards {
 			if bingo(board, drawn) {
-				println("Turn", turn, "- Bingo on board number", boardIndex+1)
-				fmt.Println(board)
-				fmt.Println(drawn)
+				println(
+					"Turn", turn,
+					"- Bingo on board number", boardIndex+1,
+					"- Score:", bingoScore(board, drawn),
+				)
+				wonBoardIndexes[boardIndex] = true
+			}
+			if len(wonBoardIndexes) == len(boards) {
 				return
 			}
 		}
 	}
-
-	fmt.Println(draws)
-	fmt.Println(boards[0])
-	fmt.Println(boards[len(boards)-1])
-	fmt.Println("Number of boards:", len(boards))
 }
 
 type Board [5][5]int
@@ -88,8 +89,6 @@ func bingo(board Board, drawn []int) bool {
 		return false
 	}
 
-	//println("Position in board:", positionInBoard.x, positionInBoard.y)
-
 	isHorizontalBingo := true
 	isVerticalBingo := true
 	for i := 0; i < 5; i++ {
@@ -101,14 +100,11 @@ func bingo(board Board, drawn []int) bool {
 		}
 	}
 
-	if !isHorizontalBingo && !isVerticalBingo {
-		return false
-	}
+	return isHorizontalBingo || isVerticalBingo
+}
 
-	println("isHorizontalBingo:", isHorizontalBingo)
-	println("isVerticalBingo:", isVerticalBingo)
-	fmt.Println("Position in board:", positionInBoard)
-
+func bingoScore(board Board, drawn []int) int {
+	latestDraw := drawn[len(drawn)-1]
 	score := 0
 	for _, row := range board {
 		for _, num := range row {
@@ -118,8 +114,7 @@ func bingo(board Board, drawn []int) bool {
 		}
 	}
 	score *= latestDraw
-	println("Score:", score)
-	return true
+	return score
 }
 
 func intInSlice(needle int, haystack []int) bool {
