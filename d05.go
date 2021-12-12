@@ -57,7 +57,7 @@ func day05() {
 			}
 		}
 	}
-	fmt.Println("Part 1 result:", twoOrMoreOverlaps)
+	fmt.Println("Result:", twoOrMoreOverlaps)
 }
 
 func orderAscending(a int, b int) [2]int {
@@ -75,19 +75,37 @@ func pointsInLine(start Point, end Point) []Point {
 
 	var points []Point
 
-	if start.x == end.x {
-		ys := orderAscending(start.y, end.y)
-		for y := ys[0]; y <= ys[1]; y++ {
+	if start.x == end.x { // vertical
+		ys := inclusiveIntRange(start.y, end.y)
+		for _, y := range ys {
 			points = append(points, Point{start.x, y})
 		}
-	} else if start.y == end.y {
-		xs := orderAscending(start.x, end.x)
-		for x := xs[0]; x <= xs[1]; x++ {
+	} else if start.y == end.y { // horizontal
+		xs := inclusiveIntRange(start.x, end.x)
+		for _, x := range xs {
 			points = append(points, Point{x, start.y})
 		}
 	} else { // diagonal
-
+		xs := inclusiveIntRange(start.x, end.x)
+		ys := inclusiveIntRange(start.y, end.y)
+		for i := 0; i < len(xs); i++ {
+			points = append(points, Point{xs[i], ys[i]})
+		}
 	}
 
 	return points
+}
+
+func inclusiveIntRange(start int, end int) []int {
+	var result []int
+	if start < end {
+		for i := start; i <= end; i++ {
+			result = append(result, i)
+		}
+	} else {
+		for i := start; i >= end; i-- {
+			result = append(result, i)
+		}
+	}
+	return result
 }
