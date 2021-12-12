@@ -5,11 +5,14 @@ import (
 	"regexp"
 )
 
+type Point struct {
+	x int
+	y int
+}
+
 type VentLine struct {
-	x1 int
-	y1 int
-	x2 int
-	y2 int
+	start Point
+	end   Point
 }
 
 func day05() {
@@ -29,29 +32,20 @@ func day05() {
 		})
 		ventLines = append(
 			ventLines,
-			VentLine{coords[0], coords[1], coords[2], coords[3]},
+			VentLine{
+				Point{coords[0], coords[1]},
+				Point{coords[2], coords[3]},
+			},
 		)
 	}
 
 	// Populate the vents map
 	for _, vline := range ventLines {
-		if vline.x1 == vline.x2 {
-			if vline.y1 == vline.y2 {
-				fmt.Println("Single dot:", vline.x1, vline.x2)
-				ventsMap[vline.y1][vline.x1]++
-			} else {
-				ys := orderAscending(vline.y1, vline.y2)
-				fmt.Println("Ys:", ys, "- X:", vline.x1)
-				for y := ys[0]; y <= ys[1]; y++ {
-					ventsMap[y][vline.x1]++
-				}
-			}
-		} else if vline.y1 == vline.y2 {
-			xs := orderAscending(vline.x1, vline.x2)
-			fmt.Println("Xs:", xs)
-			for x := xs[0]; x <= xs[1]; x++ {
-				ventsMap[vline.y1][x]++
-			}
+		start := vline.start
+		end := vline.end
+		points := pointsInLine(start, end)
+		for _, point := range points {
+			ventsMap[point.y][point.x]++
 		}
 	}
 
@@ -63,7 +57,7 @@ func day05() {
 			}
 		}
 	}
-	println("Part 1 result:", twoOrMoreOverlaps)
+	fmt.Println("Part 1 result:", twoOrMoreOverlaps)
 }
 
 func orderAscending(a int, b int) [2]int {
@@ -72,4 +66,28 @@ func orderAscending(a int, b int) [2]int {
 	} else {
 		return [2]int{b, a}
 	}
+}
+
+func pointsInLine(start Point, end Point) []Point {
+	if start == end {
+		return []Point{start}
+	}
+
+	var points []Point
+
+	if start.x == end.x {
+		ys := orderAscending(start.y, end.y)
+		for y := ys[0]; y <= ys[1]; y++ {
+			points = append(points, Point{start.x, y})
+		}
+	} else if start.y == end.y {
+		xs := orderAscending(start.x, end.x)
+		for x := xs[0]; x <= xs[1]; x++ {
+			points = append(points, Point{x, start.y})
+		}
+	} else { // diagonal
+
+	}
+
+	return points
 }
