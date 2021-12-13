@@ -5,6 +5,11 @@ import (
 	"strings"
 )
 
+type FishChunk struct {
+	count int
+	timer int
+}
+
 func day06() {
 	//input := "3,4,3,1,2"
 	//fishes := stringsToInts(strings.Split(input, ","))
@@ -12,19 +17,41 @@ func day06() {
 	input = input[:len(input)-1]
 	fishes := stringsToInts(strings.Split(input, ","))
 
-	for day := 1; day <= 80; day++ {
-		for i, fish := range fishes {
-			if fish == 0 {
-				fishes[i] = 6
-				fishes = append(fishes, 8)
+	var chunks []FishChunk
+	currentChunk := FishChunk{1, fishes[0]}
+	for _, fish := range fishes[1:] {
+		if fish == currentChunk.timer {
+			currentChunk.count++
+		} else {
+			chunks = append(chunks, currentChunk)
+			currentChunk = FishChunk{1, fish}
+		}
+	}
+	chunks = append(chunks, currentChunk)
+
+	for day := 1; day <= 256; day++ {
+		newChunk := FishChunk{0, 8}
+		for i, _ := range chunks {
+			if chunks[i].timer == 0 {
+				chunks[i].timer = 6
+				newChunk.count += chunks[i].count
 			} else {
-				fishes[i]--
+				chunks[i].timer--
 			}
 		}
-		//fmt.Print("Day ", day, ": ", fishes, "\n")
+		if newChunk.count > 0 {
+			chunks = append(chunks, newChunk)
+		}
+		//fmt.Print("Day ", day, ": ", chunks, "\n")
 	}
 
-	fmt.Println("Result:", len(fishes))
+	fishCount := 0
+	for _, chunk := range chunks {
+		fishCount += chunk.count
+	}
+
+	fmt.Println(chunks)
+	fmt.Println("Result:", fishCount)
 }
 
 func sum(numbers []int) int {
