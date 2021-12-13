@@ -1,7 +1,11 @@
 package main
 
+import "fmt"
+
 func main() {
-	for i, x := range []int{2, 2} {
-		println(i, x)
+	ar := []int{2, 3}
+	for i, _ := range ar {
+		ar = append(ar, i)
+		fmt.Println(ar)
 	}
 }
