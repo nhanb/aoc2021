@@ -32,7 +32,8 @@ func day07() {
 func calculateFuelForX(x int, positions []int) int {
 	fuel := 0
 	for _, position := range positions {
-		fuel += abs(position - x)
+		numSteps := abs(position - x)
+		fuel += fuelForSteps(numSteps)
 	}
 	return fuel
 }
@@ -43,4 +44,12 @@ func abs(value int) int {
 	} else {
 		return -value
 	}
+}
+
+func fuelForSteps(steps int) int {
+	result := 0
+	for i := 1; i <= steps; i++ {
+		result += i
+	}
+	return result
 }
