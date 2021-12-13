@@ -51,3 +51,13 @@ func binaryToDecimal(input string) int64 {
 	result, _ := strconv.ParseInt(string(input), 2, 64)
 	return result
 }
+
+func max(nums []int) int {
+	max := nums[0]
+	for _, num := range nums[1:] {
+		if num > max {
+			max = num
+		}
+	}
+	return max
+}
